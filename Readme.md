@@ -21,23 +21,27 @@ vagrant up
 
 ## Usage
 
-##### Grafana
+### Grafana
 
 URL: http://127.0.0.1:3000
+
 Username: evolution
+
 Password: evolution
 
 yep...really safe
 
 Two dashboards are available, one is monitoring kafka server and the other one the topics.
 
-##### Prometheus
+### Prometheus
 
 (just in case you want to take a look)
 
 URL: http://127.0.0.1:9090
 
-##### Kubectl config file
+I am monitoring both kafka and kafka-jmx.
+
+### Kubectl config file
 
 Inside the guest OS under `/etc/rancher/k3s/k3s.yaml`
 
