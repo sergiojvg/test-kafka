@@ -1,0 +1,40 @@
+---
+#- name: Get services 
+#  service_facts:
+#  register: services
+
+- name: Stop and disable systemd-resolved
+  become: true
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+
+      #- name: Do not let NetworkManager modify DNS
+      #  lineinfile:
+      #    dest: "/etc/NetworkManager/NetworkManager.conf"
+      #    line: "dns=none"
+      #    regexp: '^dns=.*'
+      #    insertafter: '^\[main\]'
+      #    state: present
+      #  when: services.ansible_facts.services['NetworkManager.service']['state'] == "running"
+      #  notify: restart_network_manager
+      #
+      #- name: Flush handlers
+      #  meta: flush_handlers
+
+- name: Configure Google DNS server
+  become: true
+  copy:
+    src: google_resolv.conf
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+      #- name: Upgrade system to latest version
+      #  apt:
+      #    upgrade: dist
+      #    update_cache: yes
+
+

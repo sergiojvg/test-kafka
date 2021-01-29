@@ -1,0 +1,19 @@
+#- hosts: all
+#  any_errors_fatal: True
+#  remote_user: root
+#  roles: 
+
+- hosts: all
+  any_errors_fatal: True
+  remote_user: root
+  roles: 
+    - basic_configs
+    - install_k3s_server
+    - terraform
+
+      #- hosts: slaves
+      #  any_errors_fatal: True
+      #  remote_user: root
+      #  roles: 
+      #    - install_k3s_worker
+

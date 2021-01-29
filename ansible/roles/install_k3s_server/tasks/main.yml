@@ -1,0 +1,58 @@
+---
+### Need to check if this is idempotent or not
+- name: Install K3S server using script
+  shell: 'curl -sfL https://get.k3s.io | K3S_RESOLV_CONF=/etc/resolv.conf sh -'
+
+- name: Wait until node token is created
+  stat:
+    path: /var/lib/rancher/k3s/server/node-token
+  become: true
+  register: test_token
+
+- debug:
+    var: test_token
+
+- name: Wait until node token is created
+  stat:
+    path: /var/lib/rancher/k3s/server/node-token
+  become: true
+  register: node_token
+  until: node_token.stat.exists
+  retries: 20
+  delay: 20
+
+- name: Wait until kubectl config file is created
+  stat:
+    path: /etc/rancher/k3s/k3s.yaml
+  register: kubeconfig_file
+  until: kubeconfig_file.stat.exists
+  retries: 20
+  delay: 20
+
+- name: start | ensure k3s is up and running
+  service:
+    name: k3s
+    state: started
+    enabled: yes
+
+- name: start | wait for master node to be ready
+  command: "/usr/local/bin/k3s kubectl get nodes"
+  become: true
+  changed_when: false
+  register: kubectl_get_nodes_result
+  until: kubectl_get_nodes_result.stdout.find("NotReady") == -1
+  retries: 30
+  delay: 20
+
+    #- name: Modify k8s config file
+    #  lineinfile:
+    #    dest: "/etc/rancher/k3s/k3s.yaml"
+    #    regexp: '^\s*server: https.*'
+    #    line: "    server: https://{{ ansible_default_ipv4.address }}:6443"
+    #    state: present
+
+    #- name: Fetch kubectl file
+    #  fetch:
+    #    src: /etc/rancher/k3s/k3s.yaml
+    #    dest: ./fetched_files/
+
