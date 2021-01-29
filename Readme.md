@@ -66,7 +66,11 @@ My python is kind of rusty.
 
 ###### Why k3s?
 
-Small, fast, comes packed with everything I need.
+Small, fast, comes packed with everything I need. 
+
+###### Why is nothing redundant?
+
+HA was not a requirement.
 
 ###### Why Terraform?
 

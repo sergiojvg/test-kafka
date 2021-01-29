@@ -1,4 +1,0 @@
-- name: Restart Grafana
-  service: name=NetworkManager state=restarted
-  listen: "restart_network_manager"
-
